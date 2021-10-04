@@ -1,30 +1,36 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
   <router-view />
 </template>
 
+<script lang="ts">
+import { onMounted } from "vue";
+import { getStore } from "./store";
+
+export default {
+  name: "App",
+  props: {},
+  setup(): void {
+    const s = getStore();
+
+    onMounted(() => {
+      const d = localStorage.getItem("data");
+      if (d) s.commit("setData", d);
+
+      const t = localStorage.getItem("lastLogInTime");
+      if (t) s.commit("setLastLoginTime", t);
+
+      const ep = localStorage.getItem("encryptedPassword");
+      if (ep) s.commit("setEncryptedPassword", ep);
+    });
+  },
+};
+</script>
+
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>

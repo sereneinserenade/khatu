@@ -4,17 +4,11 @@
 
 <script lang="ts">
 import { getStore } from "@/store";
-import { computed } from "@vue/reactivity";
-
 export default {
   name: "Home",
   props: {},
   setup() {
-    const s = getStore();
-
-    let entities = computed(() => s.state.data.entities);
-
-    return { entities };
+    // const s = getStore();
   },
 };
 </script>
