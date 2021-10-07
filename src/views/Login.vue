@@ -21,13 +21,18 @@
       />
 
       <section class="actions">
-        <n-button size="medium" type="error" block dashed :maxlength="10">
+        <n-button
+          @click="clearVals"
+          size="medium"
+          type="info"
+          block
+          dashed
+          :maxlength="10"
+        >
           Clear
         </n-button>
 
-        <n-button @click="logVal" size="medium" block type="info">
-          Submit
-        </n-button>
+        <n-button size="medium" block type="info"> Submit </n-button>
       </section>
 
       <section class="new-user">
@@ -53,15 +58,15 @@ export default {
     const username = ref("");
     const password = ref("");
 
-    const updatePassword = (pass: string) => {
+    const updatePassword = (pass: string): void => {
       password.value = pass;
     };
 
-    const logVal = () => {
-      console.log(username.value, password.value);
+    const clearVals = (): void => {
+      username.value = password.value = "";
     };
 
-    return { username, password, updatePassword, logVal };
+    return { username, password, updatePassword, clearVals };
   },
 };
 </script>
