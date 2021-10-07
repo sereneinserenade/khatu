@@ -47,6 +47,6 @@ export default createStore<State>({
   // modules: {},
 });
 
-export function getStore(): Store<State> {
+export function gimmeStore(): Store<State> {
   return useStore(key);
 }

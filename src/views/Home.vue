@@ -3,14 +3,14 @@
 </template>
 
 <script lang="ts">
-import { getStore } from "@/store";
+import { gimmeStore } from "@/store";
 import { computed } from "@vue/reactivity";
 
 export default {
   name: "Home",
   props: {},
   setup() {
-    const s = getStore();
+    const s = gimmeStore();
 
     let entities = computed(() => s.state.data.entities);
 
