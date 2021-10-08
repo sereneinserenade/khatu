@@ -32,7 +32,9 @@
           Clear
         </n-button>
 
-        <n-button size="medium" block type="info"> Submit </n-button>
+        <n-button @click="submit" size="medium" block type="info">
+          Submit
+        </n-button>
       </section>
 
       <section class="new-user">
@@ -50,6 +52,8 @@
 import { ref } from "vue";
 import { NButton, NInput } from "naive-ui";
 import { useRouter } from "vue-router";
+import { crypt } from "@/utils";
+import store from "@/store";
 
 export default {
   name: "Home",
@@ -74,7 +78,19 @@ export default {
       });
     };
 
-    return { username, password, clearValues, goToSignUp };
+    const submit = (): void => {
+      const [uname, pass] = [username.value, password.value];
+
+      if (uname && pass) {
+        const encryptedVal = crypt(uname, pass);
+
+        if (store.state.encryptedPassword === encryptedVal) {
+          console.log("tada, itsworking");
+        }
+      }
+    };
+
+    return { username, password, clearValues, goToSignUp, submit };
   },
 };
 </script>

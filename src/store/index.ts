@@ -1,6 +1,6 @@
+import { reactive, readonly } from "vue";
 import { Data, TransactionEntity } from "@/types/store";
-import { createStore, useStore, Store } from "vuex";
-import { InjectionKey } from "vue";
+import { setLocalStorageItem } from "@/utils";
 
 export interface State {
   data: Data;
@@ -9,44 +9,47 @@ export interface State {
   encryptedPassword: string;
 }
 
-export const key: InjectionKey<Store<State>> = Symbol();
-
-export default createStore<State>({
-  state: {
-    data: {
-      createdAt: new Date(),
-      entities: [],
-      modifiedAt: new Date(),
-    },
-    encryptedPassword: "",
-    isLoggedIn: false,
-    lastLogInTime: new Date(),
+export const s = reactive<State>({
+  data: {
+    createdAt: new Date(),
+    entities: [],
+    modifiedAt: new Date(),
   },
-  mutations: {
-    setData(s, d: Data) {
-      s.data = d;
-    },
-
-    setEntities(s, es: TransactionEntity[]) {
-      s.data.entities = es;
-    },
-
-    addEntity(s, e: TransactionEntity) {
-      s.data.entities.push(e);
-    },
-
-    setEncryptedPassword(s, ep: string) {
-      s.encryptedPassword = ep;
-    },
-
-    setLastLoginTime(s, t) {
-      s.lastLogInTime = t;
-    },
-  },
-  // actions: {},
-  // modules: {},
+  encryptedPassword: "",
+  isLoggedIn: false,
+  lastLogInTime: new Date(),
 });
 
-export function gimmeStore(): Store<State> {
-  return useStore(key);
-}
+export const setData = (data: Data) => {
+  s.data = data;
+  setLocalStorageItem("data", data);
+};
+
+export const setEntities = (es: TransactionEntity[]) => {
+  s.data.entities = es;
+  setLocalStorageItem("data", s.data);
+};
+
+export const addEntity = (e: TransactionEntity) => {
+  s.data.entities.push(e);
+  setLocalStorageItem("data", s.data);
+};
+
+export const setEncryptedPassword = (ep: string) => {
+  s.encryptedPassword = ep;
+  setLocalStorageItem("encryptedPassword", ep);
+};
+
+export const setLastLoginTime = (t: Date) => {
+  s.lastLogInTime = t;
+  setLocalStorageItem("lastLogInTime", t.toString());
+};
+
+export default {
+  state: readonly(s),
+  setData,
+  setEntities,
+  addEntity,
+  setEncryptedPassword,
+  setLastLoginTime,
+};

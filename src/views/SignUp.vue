@@ -44,7 +44,13 @@
           Clear
         </n-button>
 
-        <n-button :disabled="!showError" size="medium" block type="info">
+        <n-button
+          @click="submit"
+          :disabled="showError"
+          size="medium"
+          block
+          type="info"
+        >
           Submit
         </n-button>
       </section>
@@ -56,7 +62,7 @@
 // import { gimmeStore } from "@/store";
 import { ref, watchEffect } from "vue";
 import { NButton, NInput } from "naive-ui";
-import { crypt, decrypt } from "@/utils/security";
+import { crypt } from "@/utils/security";
 
 export default {
   name: "SignUp",
@@ -88,6 +94,10 @@ export default {
     const submit = (): void => {
       if (showError.value) return;
       const encryptedPass = crypt(username.value, password.value);
+
+      if (encryptedPass) {
+        localStorage.setItem("encryptedPassword", encryptedPass);
+      }
     };
 
     return {
@@ -96,6 +106,7 @@ export default {
       confirmPassword,
       showError,
       clearValues,
+      submit,
     };
   },
 };

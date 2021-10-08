@@ -4,26 +4,26 @@
 
 <script lang="ts">
 import { onMounted } from "vue";
-import { gimmeStore } from "./store";
 import { useRouter, useRoute } from "vue-router";
 import { differenceInHours } from "date-fns";
+import store from "@/store";
 
 export default {
   name: "App",
   props: {},
-  setup(): void {
-    const s = gimmeStore();
+  setup() {
     const router = useRouter();
     const route = useRoute();
 
     onMounted(() => {
       const d = localStorage.getItem("data");
-      if (d) s.commit("setData", d);
+      if (d) store.setData(JSON.parse(d));
 
       const t = localStorage.getItem("lastLogInTime");
       if (t) {
-        s.commit("setLastLoginTime", t);
+        store.setLastLoginTime(new Date(t));
         const diff = differenceInHours(new Date(), new Date(t));
+        debugger;
         if (diff > 1) {
           router.push({
             name: "login",
@@ -40,8 +40,10 @@ export default {
       }
 
       const ep = localStorage.getItem("encryptedPassword");
-      if (ep) s.commit("setEncryptedPassword", ep);
+      if (ep) store.setEncryptedPassword(ep);
     });
+
+    return { s: store.state };
   },
 };
 </script>
