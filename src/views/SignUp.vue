@@ -59,10 +59,11 @@
 </template>
 
 <script lang="ts">
-// import { gimmeStore } from "@/store";
 import { ref, watchEffect } from "vue";
 import { NButton, NInput } from "naive-ui";
 import { crypt } from "@/utils/security";
+import { useRouter } from "vue-router";
+import store from "@/store";
 
 export default {
   name: "SignUp",
@@ -72,6 +73,8 @@ export default {
     NInput,
   },
   setup() {
+    const router = useRouter();
+
     const username = ref("");
     const password = ref("");
     const confirmPassword = ref("");
@@ -96,7 +99,13 @@ export default {
       const encryptedPass = crypt(username.value, password.value);
 
       if (encryptedPass) {
-        localStorage.setItem("encryptedPassword", encryptedPass);
+        debugger;
+        store.setEncryptedPassword(encryptedPass);
+        store.setLastLoginTime(new Date());
+
+        router.push({
+          name: "home",
+        });
       }
     };
 

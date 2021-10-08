@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts">
-// import { gimmeStore } from "@/store";
 import { computed, ref } from "vue";
 import { NButton, NInput } from "naive-ui";
 import { useRouter } from "vue-router";
