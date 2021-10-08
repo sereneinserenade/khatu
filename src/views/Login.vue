@@ -37,7 +37,7 @@
         </n-button>
       </section>
 
-      <section class="new-user">
+      <section v-if="showSignUp" class="new-user">
         New user ?
         <n-button @click="goToSignUp" text tag="a" type="info">
           Sign up here ->
@@ -49,7 +49,7 @@
 
 <script lang="ts">
 // import { gimmeStore } from "@/store";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { NButton, NInput } from "naive-ui";
 import { useRouter } from "vue-router";
 import { crypt } from "@/utils";
@@ -64,6 +64,8 @@ export default {
   },
   setup() {
     const router = useRouter();
+
+    const currentEncryptedPass = computed(() => store.state.encryptedPassword);
 
     const username = ref("");
     const password = ref("");
@@ -84,13 +86,17 @@ export default {
       if (uname && pass) {
         const encryptedVal = crypt(uname, pass);
 
-        if (store.state.encryptedPassword === encryptedVal) {
-          console.log("tada, itsworking");
+        if (currentEncryptedPass.value === encryptedVal) {
+          router.push({
+            name: "home",
+          });
         }
       }
     };
 
-    return { username, password, clearValues, goToSignUp, submit };
+    const showSignUp = computed(() => !currentEncryptedPass.value.length);
+
+    return { username, password, clearValues, goToSignUp, submit, showSignUp };
   },
 };
 </script>
