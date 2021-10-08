@@ -1,30 +1,57 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
   <router-view />
 </template>
 
+<script lang="ts">
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { differenceInHours } from "date-fns";
+import store from "@/store";
+
+export default {
+  name: "App",
+  props: {},
+  setup() {
+    const router = useRouter();
+
+    onMounted(() => {
+      const d = localStorage.getItem("data");
+      if (d) store.setData(JSON.parse(d));
+
+      const t = localStorage.getItem("lastLogInTime");
+      if (t) {
+        store.setLastLoginTime(new Date(t));
+        const diff = differenceInHours(new Date(), new Date(t));
+        if (diff > 1) {
+          router.push({
+            name: "login",
+          });
+        } else {
+          router.push({
+            name: "home",
+          });
+        }
+      } else {
+        router.push({
+          name: "login",
+        });
+      }
+
+      const ep = localStorage.getItem("encryptedPassword");
+      if (ep) store.setEncryptedPassword(ep);
+    });
+
+    return { s: store.state };
+  },
+};
+</script>
+
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  font-size: 16px;
 }
 </style>
