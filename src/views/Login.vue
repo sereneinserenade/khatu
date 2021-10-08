@@ -87,6 +87,8 @@ export default {
         const encryptedVal = crypt(uname, pass);
 
         if (currentEncryptedPass.value === encryptedVal) {
+          store.setLastLoginTime(new Date());
+
           router.push({
             name: "home",
           });

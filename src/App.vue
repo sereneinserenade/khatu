@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { differenceInHours } from "date-fns";
 import store from "@/store";
 
@@ -13,7 +13,6 @@ export default {
   props: {},
   setup() {
     const router = useRouter();
-    const route = useRoute();
 
     onMounted(() => {
       const d = localStorage.getItem("data");
@@ -23,7 +22,6 @@ export default {
       if (t) {
         store.setLastLoginTime(new Date(t));
         const diff = differenceInHours(new Date(), new Date(t));
-        debugger;
         if (diff > 1) {
           router.push({
             name: "login",
