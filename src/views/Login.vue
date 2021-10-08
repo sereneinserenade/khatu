@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="login">
     <section class="login-form">
       <h1>Login</h1>
       <n-input
@@ -103,7 +103,7 @@ export default {
 </script>
 
 <style lang="scss">
-.home {
+.login {
   height: 100vh;
   display: flex;
   justify-content: center;
